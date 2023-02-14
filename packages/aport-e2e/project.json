@@ -1,0 +1,36 @@
+{
+    "name": "aport-e2e",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "packages/aport-e2e/src",
+    "projectType": "application",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "packages/aport-e2e/cypress.config.ts",
+                "devServerTarget": "aport:serve:development",
+                "testingType": "e2e"
+            },
+            "configurations": {
+                "production": {
+                    "devServerTarget": "aport:serve:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": [
+                "{options.outputFile}"
+            ],
+            "options": {
+                "lintFilePatterns": [
+                    "packages/aport-e2e/**/*.{js,ts}"
+                ]
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": [
+        "aport"
+    ]
+}
