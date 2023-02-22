@@ -1,15 +1,17 @@
-import { defineConfig } from "vite";
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import react from "@vitejs/plugin-react";
-import viteTsConfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from 'vite';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import react from '@vitejs/plugin-react';
+import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
     optimizeDeps: {
         esbuildOptions: {
+            // Node.js global to browser globalThis
             define: {
                 global: 'globalThis'
             },
+            // Enable esbuild polyfill plugins
             plugins: [
                 NodeGlobalsPolyfillPlugin({
                     process: true,
@@ -21,13 +23,13 @@ export default defineConfig({
     },
     server: {
         port: 4200,
-        host: "localhost",
+        host: 'localhost'
     },
     plugins: [
         react(),
         viteTsConfigPaths({
-            root: "../../",
-        }),
+            root: '../../'
+        })
     ],
     // Uncomment this if you are using workers.
     // worker: {
@@ -40,9 +42,9 @@ export default defineConfig({
     test: {
         globals: true,
         cache: {
-            dir: "../../node_modules/.vitest",
+            dir: '../../node_modules/.vitest'
         },
-        environment: "jsdom",
-        include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    },
+        environment: 'jsdom',
+        include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']
+    }
 });

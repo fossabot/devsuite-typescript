@@ -20,3 +20,5 @@ export function getSecretariumContext(): React.Context<SecretariumContextValue> 
 }
 
 export const SecretariumContext = getSecretariumContext();
+
+export default SecretariumContext;

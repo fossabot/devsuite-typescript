@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
-import { SCP } from '@secretarium/connector';
-import type { Transaction } from '@secretarium/connector';
+import type { Connector, ConnectorOptions } from '@secretarium/connector';
 
 export type QueryOptions<TBase> = TBase & {
     timeout?: number;
@@ -16,7 +15,8 @@ export type Query = {
 }
 
 export type SecretariumContextValue = {
-    connector?: SCP;
+    connector?: Connector;
+    options?: ConnectorOptions;
 }
 
 export type SecretariumOptions = {
@@ -32,11 +32,11 @@ export type SecretariumProviderProps = {
     // link?: LinkImplementation;
     // connections?: Server | Array<Server>;
     // options?: SecretariumOptions;
-    connector?: SCP;
+    connector?: Connector;
     options?: never;
 } | {
     connector?: never;
-    options?: never;
+    options?: ConnectorOptions;
 })
 
 export interface DoFetchArgs {
@@ -47,14 +47,4 @@ export interface DoFetchArgs {
         id: string
         cached?: Response
     }
-}
-
-export interface Connector {
-    version: string;
-    isConnected: boolean;
-    request(command: {
-        application: string,
-        route: string
-        explicit?: string
-    }, args?: Record<string, any>, subscribe?: boolean): Promise<Transaction>;
 }

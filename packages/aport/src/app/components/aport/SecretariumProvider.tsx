@@ -1,21 +1,20 @@
-
-
 import { useMemo } from 'react';
 import type { FC } from 'react';
-import { SCP } from '@secretarium/connector';
-import type { SecretariumContextValue, SecretariumProviderProps } from './types';
+import { SecretariumConnector } from '@secretarium/connector';
 import { SecretariumContext } from './SecretariumContext';
+import type { SecretariumContextValue, SecretariumProviderProps } from './types';
 
 export const SecretariumProvider: FC<SecretariumProviderProps> = ({
     children,
-    connector
+    connector,
+    options
 }) => {
 
     const defaults = useMemo<SecretariumContextValue>(
         () => ({
-            connector: connector ?? new SCP()
+            connector: connector ?? new SecretariumConnector(options ?? {})
         }),
-        [connector]
+        [connector, options]
     );
 
     return (
@@ -23,10 +22,6 @@ export const SecretariumProvider: FC<SecretariumProviderProps> = ({
             {children}
         </SecretariumContext.Provider>
     );
-
-    // return <SecretariumContext.Provider value={defaults}>
-    //     {children}
-    //     </SecretariumContext.Provider>;
 };
 
 export default SecretariumProvider;

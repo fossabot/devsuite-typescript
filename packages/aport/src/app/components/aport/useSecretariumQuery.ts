@@ -3,37 +3,42 @@ import { SecretariumContext } from './SecretariumContext';
 import { useQuery } from '@tanstack/react-query';
 import { Query } from './types';
 
+// type Result = {
+//     platform_statistics: {
+//         committed_quantity: number;
+//         detokenization_quantity: number;
+//         tokenization_quantity: number;
+//         total_bid_quantity: number;
+//         total_quantity: number;
+//         transfered_quantity: number;
+//         start: number;
+//         end: number;
+//     }
+// };
+
 export const useSecretariumQuery = (props: Query) => {
     const { connector } = useContext(SecretariumContext);
 
-    const { isLoading, data, error } = useQuery({
-        queryKey: ['test'],
-        queryFn: () => {
-            console.log('🔃 Refetching...');
-            let data;
-            const query = connector?.newTx('stts', 'get-platform-statistics', `stts_get_statistics_${Date.now()}`, {});
-            // write request
-            query?.onResult?.((result: any) => {
-                console.log('✅ RESULT: ', result);
-                data = result.platform_statistics.current_period.total_quantity;
-                //return data;
-            });
-            query?.onError?.((queryError: any) => {
+    const getStats = () => connector!.request({
+        application: props.app,
+        route: props.route
+    }, props.args)
+        .then(request => request
+            .onResult(result => result)
+            .onError((queryError: any) => {
                 console.error('🔴 OOPS: ', queryError);
                 throw new Error(`Transaction error: ${queryError?.message?.toString() ?? queryError?.toString()}`);
-                //return error;
-            });
-            query?.send?.()
-                .catch((queryError) => {
-                    console.error('🔴 OOPS: ', queryError);
-                    throw new Error(`Transaction error: ${queryError?.message?.toString() ?? queryError?.toString()}`);
-                    //return error;
-                });
-            return data;
-        },
+            })
+            .send());
+        // .catch(() => console.error('🔴 OOPS!'));
+
+    const { isLoading, data, error } = useQuery({
+        queryKey: ['test'],
+        queryFn: getStats,
         retry: true,
-        retryDelay: 1000
-    })
+        retryDelay: 5000,
+        cacheTime: 0
+    });
 
     console.log('🏃 <<< RUNNING >>> 🏃', isLoading, data, error);
 
