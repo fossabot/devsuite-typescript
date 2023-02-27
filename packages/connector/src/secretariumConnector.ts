@@ -84,6 +84,11 @@ export const SecretariumConnector: ConnectorConstructor = class SecretariumConne
             .then(() => {
                 this._isConnected = true;
                 this._isConnecting = false;
+            })
+            .catch((e: Error) => {
+                this._isConnected = false;
+                this._isConnecting = false;
+                throw new Error(`Connection failed - ${e}`);
             });
     }
 
