@@ -1,7 +1,7 @@
 import React from 'react';
-import { Aport } from './aport/Aport';
-import { secretariumQuery } from './aport/secretariumQuery';
-import { useConnector } from '@secretarium/react';
+// import { Aport } from './aport/Aport';
+// import { secretariumQuery } from './aport/secretariumQuery';
+import { useAport } from '@secretarium/react';
 
 type Stats = {
     platform_statistics: {
@@ -20,56 +20,44 @@ type Stats = {
 
 const Foo: React.FC = () => {
 
-    const connector = useConnector();
+    // const connector = useConnector();
 
-    if (!connector)
-        return <p>Connector is not initialised</p>;
+    // if (!connector)
+    //     return <p>Connector is not initialised</p>;
 
     const query = {
         app: 'stts',
-        route: 'get-platform-statistics',
+        route: 'get-platform-statistic',
         args: {}
     };
 
-    const { isLoading, data, error, refetch } = Aport(
-        [query.route],
-        async () => secretariumQuery<Stats>(connector, query),
-        { enabled: false }
-    );
+    // const { data, error, refetch, fetchStatus } = Aport(
+    //     [query.route],
+    //     async () => secretariumQuery<Stats>(connector, query),
+    //     {
+    //         enabled: false
+    //     }
+    // );
+
+    const { data, error, refetch, fetchStatus } = useAport<Stats, Error>([query.route], query, { enabled: false });
 
     const handleClick = () => refetch();
 
     if (error) {
-        return <p>{`${error}`}</p>;
+        return <div>
+            <button onClick={handleClick}>Click me</button>
+            <p>An error has occurred: <b>{`${error}`}</b></p>
+        </div>;
+    }
+
+    if (fetchStatus === 'fetching') {
+        return <p>Loading...</p>;
     }
 
     return <div>
         <button onClick={handleClick}>Click me</button>
-        {isLoading ? <p>Loading...</p> : null}
         {data ? <p>{`✅ Total quantity enferumized: ${JSON.stringify(data.platform_statistics.current_period.total_quantity)}`}</p> : null}
     </div>;
 };
 
 export default Foo;
-
-// async function getStats(connection: Connection, query: Query): Promise<Stats> {
-//     const connector = new SecretariumConnector({
-//         connection: {
-//             kem: connection.kem,
-//             url: connection.url,
-//             trustKey: connection.trustKey
-//         }
-//     });
-
-//     return connector.request({
-//         application: query.app,
-//         route: query.route
-//     }, query.args)
-//         .then(request => request
-//             .onResult(result => result)
-//             .onError((queryError: any) => {
-//                 console.error('🔴 OOPS: ', queryError);
-//                 throw new Error(`Transaction error: ${queryError?.message?.toString() ?? queryError?.toString()}`);
-//             })
-//             .send()) as unknown as Stats;
-// }
