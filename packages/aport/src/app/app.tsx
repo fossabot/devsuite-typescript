@@ -3,7 +3,7 @@ import { SecretariumConnector } from '@secretarium/connector';
 import { SecretariumProvider } from '@secretarium/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Foo from './components/Foo';
+import Example from './components/Example';
 import './app.css';
 import styles from './app.module.css';
 
@@ -25,7 +25,7 @@ const App: React.FC = () => {
                 <div className={styles.container}>
                     <div className={styles.box}>
                         <h1>Hello there</h1>
-                        <Foo />
+                        <Example />
                     </div>
                 </div>
                 <ReactQueryDevtools initialIsOpen={false} />

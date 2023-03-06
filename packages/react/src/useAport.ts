@@ -27,7 +27,8 @@ export function useAport<
 
             return connector.request({
                 application: query.app,
-                route: query.route
+                route: query.route,
+                explicit: query.route
             }, query.args)
                 .then(request => request
                     .onResult(result => result)

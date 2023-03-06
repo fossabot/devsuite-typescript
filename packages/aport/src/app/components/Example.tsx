@@ -1,6 +1,4 @@
 import React from 'react';
-// import { Aport } from './aport/Aport';
-// import { secretariumQuery } from './aport/secretariumQuery';
 import { useAport } from '@secretarium/react';
 
 type Stats = {
@@ -18,26 +16,13 @@ type Stats = {
     }
 };
 
-const Foo: React.FC = () => {
-
-    // const connector = useConnector();
-
-    // if (!connector)
-    //     return <p>Connector is not initialised</p>;
+const Example: React.FC = () => {
 
     const query = {
         app: 'stts',
-        route: 'get-platform-statistic',
+        route: 'get-platform-statistics',
         args: {}
     };
-
-    // const { data, error, refetch, fetchStatus } = Aport(
-    //     [query.route],
-    //     async () => secretariumQuery<Stats>(connector, query),
-    //     {
-    //         enabled: false
-    //     }
-    // );
 
     const { data, error, refetch, fetchStatus } = useAport<Stats, Error>([query.route], query, { enabled: false });
 
@@ -60,4 +45,4 @@ const Foo: React.FC = () => {
     </div>;
 };
 
-export default Foo;
+export default Example;
